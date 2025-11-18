@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import styles from "@/app/components/landing/style.module.css";
+import { formatPrice } from "@/lib/formatters";
 
 interface ProductCardProps {
   id: string;
@@ -38,9 +39,7 @@ export default function ProductCard({
           {description || "No description available"}
         </p>
         <div className={styles["product-meta"]}>
-          <span className={styles["product-price"]}>
-            Rp{price.toLocaleString("id-ID")}
-          </span>
+          <span className={styles["product-price"]}>{formatPrice(price)}</span>
           <button
             className={styles["product-btn"]}
             type="button"

@@ -5,13 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getProducts } from "@/app/actions/product-list";
 import styles from "@/app/components/landing/style.module.css";
-
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-  }).format(price);
-}
+import { formatPrice } from "@/lib/formatters";
 
 export default function ProductsPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
