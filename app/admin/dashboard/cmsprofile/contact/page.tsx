@@ -9,6 +9,7 @@ interface ContactData {
   address: string;
   instagram: string;
   tiktok: string;
+  recipientEmail: string;
 }
 
 interface AlertState {
@@ -32,6 +33,7 @@ export default function ContactPage() {
           address: d.contact?.address || "",
           instagram: d.contact?.instagram || "",
           tiktok: d.contact?.tiktok || "",
+          recipientEmail: d.contactRecipientEmail || "",
         });
         setLoading(false);
       })
@@ -48,6 +50,7 @@ export default function ContactPage() {
           address: "",
           instagram: "",
           tiktok: "",
+          recipientEmail: "",
         });
         setLoading(false);
       });
@@ -71,6 +74,7 @@ export default function ContactPage() {
 
       const fullData = await res.json();
       fullData.contact = data;
+      fullData.contactRecipientEmail = data.recipientEmail;
 
       const saveRes = await fetch("/api/cmsprofile", {
         method: "POST",
@@ -161,8 +165,29 @@ export default function ContactPage() {
               color: "#374151",
             }}
           >
-            Title
+            Email Penerima (untuk form submission)
           </label>
+          <input
+            type="email"
+            value={data.recipientEmail}
+            onChange={(e) => setData({ ...data, recipientEmail: e.target.value })}
+            placeholder="admin@example.com"
+            style={{
+              width: "100%",
+              padding: 10,
+              border: "1px solid #e5e7eb",
+              borderRadius: 6,
+              fontSize: 14,
+              color: "#1f2937",
+              backgroundColor: "#ffffff",
+            }}
+          />
+          <p style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
+            Email ini akan menerima semua pesan dari contact form
+          </p>
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
           <input
             type="text"
             value={data.title}

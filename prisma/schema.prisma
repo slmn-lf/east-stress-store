@@ -61,9 +61,20 @@ model CMSProfile {
   heroImages           String[] @default([])
   about                String   @default("{}")  // JSON string
   contact              String   @default("{}")  // JSON string
+  contactRecipientEmail String @default("")  // Email untuk menerima contact form submissions
   recommendedProducts  String[] @default([])
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 
   @@map("cms_profiles")
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+
+  @@map("contact_submissions")
 }

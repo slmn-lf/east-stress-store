@@ -1,39 +1,74 @@
 import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
-
-const filePath = path.join(process.cwd(), "public", "data", "contacts.json");
-
-async function ensureFile() {
-  try {
-    await fs.access(filePath);
-  } catch {
-    await fs.mkdir(path.dirname(filePath), { recursive: true });
-    await fs.writeFile(filePath, JSON.stringify([]), "utf8");
-  }
-}
+import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    await ensureFile();
-    const text = await fs.readFile(filePath, "utf8");
-    const data = JSON.parse(text);
-    return NextResponse.json(data);
+    // Get contact submissions
+    const submissions = await prisma.contactSubmission.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 100,
+    });
+
+    return NextResponse.json({ success: true, data: submissions });
   } catch (err: any) {
+    console.error("GET /api/contact error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
 export async function POST(req: Request) {
   try {
-    await ensureFile();
     const body = await req.json();
-    const text = await fs.readFile(filePath, "utf8");
-    const arr = JSON.parse(text);
-    arr.push({ ...body, createdAt: new Date().toISOString() });
-    await fs.writeFile(filePath, JSON.stringify(arr, null, 2), "utf8");
-    return NextResponse.json({ ok: true });
+    const { name, email, message } = body;
+
+    // Validate input
+    if (!name || !email || !message) {
+      return NextResponse.json(
+        { error: "Name, email, and message are required" },
+        { status: 400 }
+      );
+    }
+
+    // Save contact submission to database
+    const submission = await prisma.contactSubmission.create({
+      data: {
+        name: String(name),
+        email: String(email),
+        message: String(message),
+      },
+    });
+
+    // Get CMS profile to get recipient email
+    let profile = await prisma.cMSProfile.findUnique({
+      where: { id: "default" },
+    });
+
+    if (!profile) {
+      profile = await prisma.cMSProfile.create({
+        data: {
+          id: "default",
+          contactRecipientEmail: "",
+        },
+      });
+    }
+
+    // TODO: Integrate with email service (SendGrid, Resend, etc.)
+    // For now, just log the submission
+    console.log("Contact submission received:", {
+      submissionId: submission.id,
+      name,
+      email,
+      message,
+      recipientEmail: profile.contactRecipientEmail || "No recipient configured",
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: "Thank you for your message!",
+      data: submission,
+    });
   } catch (err: any) {
+    console.error("POST /api/contact error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

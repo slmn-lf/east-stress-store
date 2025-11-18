@@ -25,12 +25,23 @@ export default function HeroPage() {
     fetch("/api/cmsprofile")
       .then((r) => r.json())
       .then((d) => {
+        // Ensure images array is properly formatted
+        const images = Array.isArray(d.hero?.images) ? d.hero.images : [];
+        // Ensure exactly 3 image slots
+        while (images.length < 3) {
+          images.push("");
+        }
+
         // Ensure data has default values if missing
         setData({
           title: d.hero?.title || "",
           subtitle: d.hero?.subtitle || "",
           cta: d.hero?.cta || "",
-          images: d.hero?.images || ["", "", ""],
+          images: images.slice(0, 3),
+        });
+        console.log("Hero data loaded:", {
+          title: d.hero?.title,
+          images: images.slice(0, 3),
         });
         setLoading(false);
       })
@@ -58,7 +69,12 @@ export default function HeroPage() {
       return;
     }
 
-    console.log("Saving hero data:", data);
+    // Ensure all images are properly formatted before save
+    const imagesToSave = data.images.map((img) =>
+      typeof img === "string" ? img : ""
+    );
+    console.log("Saving hero data:", { ...data, images: imagesToSave });
+
     try {
       const res = await fetch("/api/cmsprofile");
       if (!res.ok) {
@@ -69,7 +85,7 @@ export default function HeroPage() {
       }
 
       const fullData = await res.json();
-      fullData.hero = data;
+      fullData.hero = { ...data, images: imagesToSave };
       console.log("Full data to save:", fullData);
 
       const saveRes = await fetch("/api/cmsprofile", {
@@ -88,6 +104,13 @@ export default function HeroPage() {
       const result = await saveRes.json();
       console.log("Save response:", result);
       if (result.ok) {
+        // Reload data to confirm save
+        setData({
+          title: result.data?.hero?.title || "",
+          subtitle: result.data?.hero?.subtitle || "",
+          cta: result.data?.hero?.cta || "",
+          images: result.data?.hero?.images || imagesToSave,
+        });
         setAlert({ type: "success", message: "✓ Data hero berhasil disimpan" });
       } else {
         setAlert({
