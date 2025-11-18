@@ -75,7 +75,7 @@ export default function AdminSidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-blue-600 to-blue-700 text-white transition-all duration-300 z-40 ${
+        className={`fixed left-0 top-0 h-screen bg-linear-to-b from-blue-600 to-blue-700 text-white transition-all duration-300 z-40 ${
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         } ${isCollapsed ? "w-20" : "w-64"}`}
       >
@@ -165,17 +165,19 @@ export default function AdminSidebar() {
                 {/* Submenu */}
                 {hasChildren && isExpanded && !isCollapsed && (
                   <div className="ml-4 space-y-1 mt-1">
-                    {item.children.map((child: any) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={closeSidebar}
-                        className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors duration-200 text-sm"
-                      >
-                        <span className="w-1 h-1 bg-white rounded-full"></span>
-                        <span>{child.label}</span>
-                      </Link>
-                    ))}
+                    {item.children.map(
+                      (child: { label: string; href: string }) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          onClick={closeSidebar}
+                          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors duration-200 text-sm"
+                        >
+                          <span className="w-1 h-1 bg-white rounded-full"></span>
+                          <span>{child.label}</span>
+                        </Link>
+                      )
+                    )}
                   </div>
                 )}
               </div>

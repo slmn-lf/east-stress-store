@@ -15,7 +15,7 @@ export default async function Home() {
     const response = await fetch(`${baseUrl}/api/cmsprofile`, {
       next: { revalidate: 60 }, // Cache for 60 seconds
     });
-    
+
     if (response.ok) {
       data = await response.json();
     } else {

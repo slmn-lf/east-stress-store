@@ -63,9 +63,15 @@ export default function ProductsPage() {
                   height={220}
                 />
                 <div className={styles["product-info"]}>
-                  <h4 className={styles["product-title"]}>{product.name}</h4>
+                  <h4 className={styles["product-title"]}>
+                    {product.name.length > 20
+                      ? `${product.name.slice(0, 20)}...`
+                      : product.name}
+                  </h4>
                   <p className={styles["product-desc"]}>
-                    {product.description || "No description available"}
+                    {product.description && product.description.length > 100
+                      ? `${product.description.slice(0, 100)}...`
+                      : product.description || "No description available"}
                   </p>
                   <div className={styles["product-meta"]}>
                     <span className={styles["product-price"]}>

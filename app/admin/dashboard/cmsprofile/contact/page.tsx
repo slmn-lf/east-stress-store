@@ -170,7 +170,9 @@ export default function ContactPage() {
           <input
             type="email"
             value={data.recipientEmail}
-            onChange={(e) => setData({ ...data, recipientEmail: e.target.value })}
+            onChange={(e) =>
+              setData({ ...data, recipientEmail: e.target.value })
+            }
             placeholder="admin@example.com"
             style={{
               width: "100%",

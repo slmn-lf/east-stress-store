@@ -5,7 +5,7 @@ import styles from "@/app/components/landing/style.module.css";
 import { formatPrice } from "@/lib/formatters";
 
 interface ProductCardProps {
-  id: string;
+  id: string; // Added id property
   name: string;
   description: string | null;
   price: number;
@@ -13,7 +13,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({
-  id,
+  id, // Keeping id for potential future use
   name,
   description,
   price,
@@ -34,16 +34,20 @@ export default function ProductCard({
         height={220}
       />
       <div className={styles["product-info"]}>
-        <h4 className={styles["product-title"]}>{name}</h4>
+        <h4 className={styles["product-title"]}>
+          {name.length > 20 ? `${name.slice(0, 20)}...` : name}
+        </h4>
         <p className={styles["product-desc"]}>
-          {description || "No description available"}
+          {description && description.length > 100
+            ? `${description.slice(0, 100)}...`
+            : description || "No description available"}
         </p>
         <div className={styles["product-meta"]}>
           <span className={styles["product-price"]}>{formatPrice(price)}</span>
           <button
             className={styles["product-btn"]}
             type="button"
-            onClick={handleAddToCart}
+            onClick={() => handleAddToCart()}
           >
             Pre-order
           </button>

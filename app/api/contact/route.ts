@@ -59,7 +59,8 @@ export async function POST(req: Request) {
       name,
       email,
       message,
-      recipientEmail: profile.contactRecipientEmail || "No recipient configured",
+      recipientEmail:
+        profile.contactRecipientEmail || "No recipient configured",
     });
 
     return NextResponse.json({

@@ -1,6 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
+interface Hero {
+  title: string;
+  subtitle: string;
+  cta: string;
+  images: string[];
+}
+
+interface CMSProfile {
+  hero: Hero;
+  about: Record<string, unknown>;
+  contact: Record<string, unknown>;
+  contactRecipientEmail: string;
+  recommendedProducts: string[];
+}
+
 export default function CmsProfileAdminPage() {
   const [text, setText] = useState("");
   const [status, setStatus] = useState<string | null>(null);
@@ -12,10 +27,24 @@ export default function CmsProfileAdminPage() {
       .catch((e) => setStatus(String(e)));
   }, []);
 
+  const validateJSON = (json: CMSProfile) => {
+    if (!json.hero) return "Hero data is required.";
+    if (!Array.isArray(json.hero.images) || json.hero.images.length < 3)
+      return "Hero images must be an array with at least 3 items.";
+    if (!json.contactRecipientEmail || json.contactRecipientEmail.trim() === "")
+      return "Contact recipient email is required.";
+    return null;
+  };
+
   const save = async () => {
     setStatus("Menyimpan...");
     try {
-      const payload = JSON.parse(text);
+      const payload: CMSProfile = JSON.parse(text);
+      const validationError = validateJSON(payload);
+      if (validationError) {
+        setStatus(validationError);
+        return;
+      }
       const res = await fetch("/api/cmsprofile", {
         method: "POST",
         body: JSON.stringify(payload),
@@ -24,8 +53,8 @@ export default function CmsProfileAdminPage() {
       const data = await res.json();
       if (data.ok) setStatus("Tersimpan");
       else setStatus(JSON.stringify(data));
-    } catch (err: any) {
-      setStatus("Invalid JSON: " + err.message);
+    } catch (err) {
+      setStatus("Invalid JSON: " + (err as Error).message);
     }
   };
 
