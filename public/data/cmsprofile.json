@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "title": "hayooooo looo dsfssdf",
+    "subtitle": "Pre-order terbaik setiap harisafadfasdassdasd fdfdf sdfdf sdfsdf",
+    "cta": "Belanja Sekarang",
+    "images": [
+      "https://res.cloudinary.com/dkmkboxha/raw/upload/v1763477895/pre-order/products/ynusybot0dijmorke8ai",
+      "https://res.cloudinary.com/dkmkboxha/image/upload/v1763477915/pre-order/products/cjjwqc8mkd4l1e31y9sw.png",
+      "https://res.cloudinary.com/dkmkboxha/image/upload/v1763477922/pre-order/products/vv2aqru4hzhsu1t0g5pi.png"
+    ]
+  },
+  "recommendedProducts": [
+    {
+      "id": "p1",
+      "title": "Produk A",
+      "image": "/placeholder.png",
+      "price": "Rp 100.000"
+    },
+    {
+      "id": "p2",
+      "title": "Produk B",
+      "image": "/placeholder.png",
+      "price": "Rp 150.000"
+    },
+    {
+      "id": "p3",
+      "title": "Produk C",
+      "image": "/placeholder.png",
+      "price": "Rp 200.000"
+    }
+  ],
+  "about": {
+    "title": "About Us",
+    "items": [
+      {
+        "id": "mission",
+        "label": "Our Mission",
+        "content": "Menyediakan produk pre-order berkualitas dengan harga terjangkau untuk semua kalangan."
+      },
+      {
+        "id": "vision",
+        "label": "Our Vision",
+        "content": "Menjadi platform pre-order terpercaya dan menjadi pilihan utama pelanggan di seluruh Indonesia."
+      },
+      {
+        "id": "values",
+        "label": "Our Values",
+        "content": "Kualitas, Integritas, dan Kepuasan Pelanggan adalah nilai utama kami dalam setiap transaksi.agsssdffgszcxfdfsxzvczxxz "
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contact Us",
+    "tagline": "Art never dead",
+    "email": "Eaststress@gmail.com",
+    "address": "123 Main Street, City, Country bogor",
+    "instagram": "https://instagram.com/eaststressstore",
+    "tiktok": "https://tiktok.com/@eaststressstore"
+  }
+}

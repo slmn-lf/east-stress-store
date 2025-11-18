@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  price         Int
+  images        String[]
+  totalPreOrder Int      @default(0)
+  status        String   @default("active")
+  validUntil    DateTime?
+  whatsapp      String
+  additionalFields AdditionalField[]
+  customers     Customer[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("products")
+}
+
+model AdditionalField {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  label     String
+  type      String   // "text", "number", "textarea", "checkbox"
+  options   String?  // untuk checkbox: "option1,option2,option3"
+  createdAt DateTime @default(now())
+
+  @@map("additional_fields")
+}
+
+model Customer {
+  id            String   @id @default(cuid())
+  name          String
+  email         String?
+  phone         String   // nomor WhatsApp untuk konfirmasi
+  address       String?
+  productId     String
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity      Int      @default(1)
+  customFields  String?  // JSON string of additional field values
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("customers")
+}
