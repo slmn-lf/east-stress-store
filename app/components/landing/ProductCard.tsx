@@ -3,6 +3,7 @@
 import Image from "next/image";
 import styles from "@/app/components/landing/style.module.css";
 import { formatPrice } from "@/lib/formatters";
+import Link from "next/link";
 
 interface ProductCardProps {
   id: string; // Added id property
@@ -26,13 +27,18 @@ export default function ProductCard({
 
   return (
     <div className={styles["product-card"]}>
-      <Image
-        className={styles["product-image"]}
-        src={image || "/placeholder.png"}
-        alt={name}
-        width={220}
-        height={220}
-      />
+      <Link
+        href={id ? `/products/${id}` : "#"}
+        className={styles["product-card-link"]}
+      >
+        <Image
+          className={styles["product-image"]}
+          src={image || "/placeholder.png"}
+          alt={name}
+          width={220}
+          height={220}
+        />
+      </Link>
       <div className={styles["product-info"]}>
         <h4 className={styles["product-title"]}>
           {name.length > 20 ? `${name.slice(0, 20)}...` : name}
@@ -44,13 +50,14 @@ export default function ProductCard({
         </p>
         <div className={styles["product-meta"]}>
           <span className={styles["product-price"]}>{formatPrice(price)}</span>
-          <button
+          <Link
+            href={id ? `/products/${id}` : "#"}
             className={styles["product-btn"]}
-            type="button"
-            onClick={() => handleAddToCart()}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => id && handleAddToCart()}
           >
-            Pre-order
-          </button>
+            Pesan
+          </Link>
         </div>
       </div>
     </div>
